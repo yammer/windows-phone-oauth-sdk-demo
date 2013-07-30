@@ -30,6 +30,7 @@ The solution consists of two projects:
 <br/>Make sure the scheme name (in this case "wp8oauthdemo") is unique to your company and WP8 app.
 
 **Step 3)** You will need to create a instance of **Yammer.OAuthSDK.Model.OAuthClientInfo** with your app's values found in [Yammer client application](https://www.yammer.com/client_applications). The best place to do this is on the Application resource dictionary in your App.xaml file e.g.
+
 ```XML
 <!--Application Resources-->
 <Application.Resources>
@@ -40,8 +41,10 @@ The solution consists of two projects:
       RedirectUri="wp8oauthdemo://something" />
 </Application.Resources>
 ```
+
 Note the creation of a Property getter to facilitate access to this object Application-wide in **App.xaml.cs**:
-```C#
+
+```csharp
 /// <summary>
 /// Easy access to the OAuth Client information defined in the App resource dictionary.
 /// </summary>
@@ -53,31 +56,39 @@ public OAuthClientInfo MyOAuthClientInfo
     }
 }
 ```
+
 **Step 4)** During the login process, users will be directed to the mobile IE web browser.  In order for the browser to be able to switch back to your WP app, the custom URL Scheme from step 2 must be registered in the iOS application.  Here's how you do that:
 <br/><br/>
 To register for a URI association, you must edit **WMAppManifest.xml** using the XML (Text) Editor. In Solution Explorer, expand the Properties folder and right-click the WMAppManifest.xml file, and then click Open With. In the Open With window, select XML(Text) Editor, and then click OK.
 <br/><br/>
 In the Extensions element of the app manifest file, a URI association is specified with a Protocol element (note that the Extensions element must immediately follow the Tokens element). Your Extensions element should look like this:
+
 ```XML
 <Extensions>
   <Protocol Name="wp8oauthdemo" NavUriFragment="encodedLaunchUri=%s" TaskID="_default" />
 </Extensions>
 ```
+
 Also make sure to override the default URI-mapper class with our OAuth URI handler in the InitializePhoneApplication() method in **App.xaml.cs**:
-```C#
+
+```csharp
 // Override the default URI-mapper class with our OAuth URI handler.
 RootFrame.UriMapper = new OAuthResponseUriMapper(MyOAuthClientInfo.RedirectUri);
 ```
+
 ***
 **That's it.**  <br/>
 After that you should be ready to go. Take a look at how the method 
-```C#
+
+```csharp
 OAuthUtils.LaunchSignIn(string clientId, string redirectUri)
 ```
+
 is implemented and used in MainPage.xaml.cs::btnSignInWithYammer_Click. That's the method that launches the IE browser and lets the user both authenticate, and Authorize the app. 
 <br/>
 After that take a look at
-```C#
+
+```csharp
 OAuthUtils.HandleApprove(string clientId,
             string clientSecret,
             string code, 
@@ -87,15 +98,18 @@ OAuthUtils.HandleApprove(string clientId,
             Action<AuthenticationResponse> onErrorResponse = null, 
             Action<Exception> onException = null)
 ```
+
 which is used in MainPage.xaml.cs::OnNavigatedTo after a user has been redirected back from the Login/Authorization page.
 <br />
 Finally, note the use of 
-```C#
+
+```csharp
 OAuthUtils.GetJsonFromApi(Uri endpoint, 
             Action<string> onSuccess, 
             Action<AuthenticationResponse> onErrorResponse = null, 
             Action<Exception> onException = null)
 ```
+
 in MainPage.xaml.cs::btnCallFollowingApi_Click to handle the simple dump of a json result of an API call after the user has been succesfully authenticated.
 rovide the same "re-entry" functionality, you need to add this app delegate method to your iOS app delegate.
 
