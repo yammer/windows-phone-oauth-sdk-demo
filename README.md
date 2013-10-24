@@ -57,7 +57,7 @@ public OAuthClientInfo MyOAuthClientInfo
 }
 ```
 
-**Step 4)** During the login process, users will be directed to the mobile IE web browser.  In order for the browser to be able to switch back to your WP app, the custom URL Scheme from step 2 must be registered in the iOS application.  Here's how you do that:
+**Step 4)** During the login process, users will be directed to the mobile IE web browser.  In order for the browser to be able to switch back to your WP app, the custom URL Scheme from step 2 must be registered in the WP application.  Here's how you do that:
 <br/><br/>
 To register for a URI association, you must edit **WMAppManifest.xml** using the XML (Text) Editor. In Solution Explorer, expand the Properties folder and right-click the WMAppManifest.xml file, and then click Open With. In the Open With window, select XML(Text) Editor, and then click OK.
 <br/><br/>
@@ -111,6 +111,6 @@ OAuthUtils.GetJsonFromApi(Uri endpoint,
 ```
 
 in MainPage.xaml.cs::btnCallFollowingApi_Click to handle the simple dump of a json result of an API call after the user has been succesfully authenticated.
-rovide the same "re-entry" functionality, you need to add this app delegate method to your iOS app delegate.
+rovide the same "re-entry" functionality, you need to add this app delegate method to your WP app delegate.
 
 **Note:** Once the server sees that a user has clicked the Allow button, future login requests do not display the page with the Allow button.  This is a one time occurance for each unique user/yammer-app combination.  Subsequent login attempts will return directly to the WP8 app without the Allow page. You can manually Revoke Access to your application by going to [your apps listing page](https://www.staging.yammer.com/account/applications).
