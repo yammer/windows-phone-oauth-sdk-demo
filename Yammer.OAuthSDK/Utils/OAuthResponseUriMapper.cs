@@ -30,7 +30,7 @@ namespace Yammer.OAuthSDK.Utils
             string decodedUri = HttpUtility.UrlDecode(uri.ToString());
 
             // URI association launch for this app.
-            if (decodedUri.Contains(redirectUri))
+            if (!string.IsNullOrEmpty(redirectUri) && decodedUri.Contains(redirectUri))
             {
                 // Extract the Uri query params (Uri looks like /Protocol?encodedLaunchUri=myappscheme://something.com/?code=p5EovkhKGrAAASmhNoUMQ)
                 int redirectUriIndex = decodedUri.IndexOf(redirectUri);
